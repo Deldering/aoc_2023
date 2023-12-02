@@ -31,20 +31,21 @@ def problem_2():
     sum = 0
     with open(os.path.join(SCRIPT_DIR, "calibration_values.txt")) as f:
         for line in f.readlines():
-            first = re.search(f"(\d|{'|'.join(NUMBERS)})", line).group()
+            first = re.search(rf"(\d|{'|'.join(NUMBERS)})", line).group()
             try:
                 first = int(first)
-            except:
+            except TypeError:
                 first = NUMBERS.index(first)
 
-            second = re.search(f"(\d|{'|'.join(REVERSE_NUMBERS)})", line[::-1]).group()
+            second = re.search(rf"(\d|{'|'.join(REVERSE_NUMBERS)})", line[::-1]).group()
             try:
                 second = int(second)
-            except:
+            except TypeError:
                 second = REVERSE_NUMBERS.index(second)
 
             sum += first * 10 + second
     return sum
+
 
 print(f"Problem 1: {problem_1()}")
 print(f"Problem 2: {problem_2()}")
