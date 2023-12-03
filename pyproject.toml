@@ -1,4 +1,7 @@
 [tool.flake8]
-max-line-length = 88
+max-line-length = 100
 extend-ignore = ["E203","E704"]
 max-complexity = 10
+
+[tool.black]
+line-length = 100

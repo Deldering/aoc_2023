@@ -40,7 +40,6 @@ def problem_2():
             game, information = line.split(":")
             colors_required = determine_colors_required(information)
             sum += colors_required["r"] * colors_required["g"] * colors_required["b"]
-            pass
     return sum
 
 
