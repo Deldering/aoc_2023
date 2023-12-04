@@ -24,7 +24,7 @@ def ranges_overlap(x: range, y: range):
 
 
 def find_adjacent_numbers(line_matches: list[LineMatches], line_range: range, index_range: range):
-    adjacent_numbers = []
+    adjacent_numbers: list[int] = []
     for j in line_range:
         for number in line_matches[j].numbers:
             if ranges_overlap(range(number.start_index, number.end_index + 1), index_range):
@@ -41,7 +41,7 @@ def has_symbol(line_matches: list[LineMatches], line_range: range, index_range: 
 
 
 def problem_1():
-    sum = 0
+    result = 0
     with open(os.path.join(SCRIPT_DIR, "engine_schematic.txt")) as f:
         line_matches: list[LineMatches] = []
         for line in f.readlines():
@@ -63,12 +63,12 @@ def problem_1():
                 range(start_search_line, end_search_line + 1),
                 range(start_search_index, end_search_index + 1),
             ):
-                sum += number.value
-    return sum
+                result += number.value
+    return result
 
 
 def problem_2():
-    sum = 0
+    result = 0
     with open(os.path.join(SCRIPT_DIR, "engine_schematic.txt")) as f:
         line_matches: list[LineMatches] = []
         for line in f.readlines():
@@ -91,8 +91,8 @@ def problem_2():
                 range(start_search_index, end_search_index + 1),
             )
             if len(adjacent_numbers) == 2:
-                sum += adjacent_numbers[0] * adjacent_numbers[1]
-    return sum
+                result += adjacent_numbers[0] * adjacent_numbers[1]
+    return result
 
 
 print(f"Problem 1: {problem_1()}")

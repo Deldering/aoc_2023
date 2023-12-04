@@ -1,3 +1,4 @@
+from enum import Enum
 import re
 import os
 
@@ -17,36 +18,53 @@ NUMBERS = [
 ]
 REVERSE_NUMBERS = [number[::-1] for number in NUMBERS]
 
+FORWARD_PATTERN = rf"(\d|{'|'.join(NUMBERS)})"
+REVERSE_PATTERN = rf"(\d|{'|'.join(REVERSE_NUMBERS)})"
+
+
+class Direction(Enum):
+    FORWARD = "FORWARD"
+    REVERSE = "REVERSE"
+
+
+def find_digit(line: str, direction: Direction):
+    if direction == Direction.FORWARD:
+        pattern = FORWARD_PATTERN
+        number_list = NUMBERS
+    elif direction == Direction.REVERSE:
+        pattern = REVERSE_PATTERN
+        number_list = REVERSE_NUMBERS
+        line = line[::-1]
+    else:
+        raise ValueError("Invalid Direction parameter")
+    result = re.search(pattern, line)
+    if result is None:
+        raise ValueError("Line doesn't contain a digit")
+    try:
+        return int(result.group())
+    except ValueError:
+        return number_list.index(result.group())
+
 
 def problem_1():
-    sum = 0
+    result = 0
     with open(os.path.join(SCRIPT_DIR, "calibration_values.txt")) as f:
         for line in f.readlines():
             values = re.findall(r"\d", line)
-            sum += int(values[0] + values[-1])
-    return sum
+            if len(values) == 0:
+                raise ValueError("Line doesn't contain a digit")
+            result += int(values[0] + values[-1])
+    return result
 
 
 def problem_2():
-    forward_search = rf"(\d|{'|'.join(NUMBERS)})"
-    reverse_search = rf"(\d|{'|'.join(REVERSE_NUMBERS)})"
-    sum = 0
+    result = 0
     with open(os.path.join(SCRIPT_DIR, "calibration_values.txt")) as f:
         for line in f.readlines():
-            first = re.search(forward_search, line).group()
-            try:
-                first = int(first)
-            except TypeError:
-                first = NUMBERS.index(first)
-
-            second = re.search(reverse_search, line[::-1]).group()
-            try:
-                second = int(second)
-            except TypeError:
-                second = REVERSE_NUMBERS.index(second)
-
-            sum += first * 10 + second
-    return sum
+            first = find_digit(line, Direction.FORWARD)
+            last = find_digit(line, Direction.REVERSE)
+            result += first * 10 + last
+    return result
 
 
 print(f"Problem 1: {problem_1()}")
